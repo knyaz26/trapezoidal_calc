@@ -1,18 +1,37 @@
 import tkinter as t
-import numpy as np
+from numpy import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FC
+
+
+def on_btn_generate_clicked():
+    
+    #recieve vars
+    text_func = ent_func.get()
+    text_a = ent_a.get()
+    text_b = ent_b.get()
+    text_n = ent_n.get()
+
+    #update_vars
+    y = eval(text_func)
+
+    #draw canvas
+    plot.clear()
+    plot.plot(x, y)
+    canvas.draw()
+    
 
 win = t.Tk()
 win.title("trapezoidal calc")
 win.geometry("720x1280")
 
-x = np.linspace(0, 10, 100)
+x = linspace(0, 10, 100)
+#es aris punqcia da aq unda shevitanot
+# edit: amas overraids vuketebt
 y = x**2 + 5
 
 fig = Figure(figsize=(5, 4))
 plot = fig.add_subplot(111)
-plot.plot(x, y)
 
 canvas = FC(fig, master=win)
 canvas.get_tk_widget().pack()
@@ -48,8 +67,10 @@ lbl_n.pack()
 ent_n = t.Entry(vbox_n)
 ent_n.pack()
 
-btn_generate = t.Button(win, text="generate")
-btn_generate.config(command=lambda: canvas.draw())
+btn_generate = t.Button(win, text="generate", command=on_btn_generate_clicked)
 btn_generate.pack()
+win.bind("<Return>", lambda e: on_btn_generate_clicked())
+
+
 
 win.mainloop()
