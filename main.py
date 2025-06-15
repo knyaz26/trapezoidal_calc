@@ -47,7 +47,7 @@ def on_btn_generate_clicked():
 
         plot.plot([x1, x2], [y_level, y_level], color="red")
 
-        approx_area += dx * y_level
+        approx_area += dx * (y1_top + y2_top) / 2
 
     canvas.draw()
 
@@ -56,9 +56,9 @@ def on_btn_generate_clicked():
 
     text_out.config(state="normal")
     text_out.delete("1.0", t.END)
-    text_out.insert(t.END, f"Approximate Area: {approx_area:.4f}\n")
-    text_out.insert(t.END, f"True Area: {true_area:.4f}\n")
-    text_out.insert(t.END, f"Difference: {difference:.4f}\n")
+    text_out.insert(t.END, f"Approximate Area: {approx_area:.2f}\n")
+    text_out.insert(t.END, f"True Area: {true_area:.2f}\n")
+    text_out.insert(t.END, f"Difference: {difference:.2f}\n")
     text_out.config(state="disabled")
 
 win = t.Tk()
