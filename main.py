@@ -3,32 +3,28 @@ from numpy import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FC
 
-
 def on_btn_generate_clicked():
-    
-    #recieve vars
-    text_func = ent_func.get()
-    text_a = ent_a.get()
-    text_b = ent_b.get()
-    text_n = ent_n.get()
+    a = eval(ent_a.get())
+    b = eval(ent_b.get())
+    n = eval(ent_n.get())
+    f = lambda x: eval(ent_func.get())
 
-    #update_vars
-    y = eval(text_func)
-
-    #draw canvas
     plot.clear()
+    x = linspace(a, b, 100)
+    y = f(x)
     plot.plot(x, y)
+
+    calc_x = linspace(a, b, n + 1)
+    calc_y = f(calc_x)
+
+    for i in range(n):
+        plot.plot([calc_x[i+1], calc_x[i+1]], [0, calc_y[i+1]], color="gray")
+
     canvas.draw()
-    
 
 win = t.Tk()
 win.title("trapezoidal calc")
 win.geometry("720x1280")
-
-x = linspace(0, 10, 100)
-#es aris punqcia da aq unda shevitanot
-# edit: amas overraids vuketebt
-y = x**2 + 5
 
 fig = Figure(figsize=(5, 4))
 plot = fig.add_subplot(111)
@@ -70,7 +66,5 @@ ent_n.pack()
 btn_generate = t.Button(win, text="generate", command=on_btn_generate_clicked)
 btn_generate.pack()
 win.bind("<Return>", lambda e: on_btn_generate_clicked())
-
-
 
 win.mainloop()
