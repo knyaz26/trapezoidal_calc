@@ -5,12 +5,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FC
 from scipy.integrate import quad
 
-def get_smaller_line(a, b):
-    if a[1][1] > b[1][1]:
-        return b
-    else:
-        return a
-
 def on_btn_generate_clicked():
     a = eval(ent_a.get())
     b = eval(ent_b.get())
@@ -26,28 +20,21 @@ def on_btn_generate_clicked():
     calc_x = linspace(a, b, n + 1)
     calc_y = f(calc_x)
 
-    lines = []
-    for i in range(n):
-        x = [calc_x[i+1], calc_x[i+1]]
-        y = [0, calc_y[i+1]]
-        plot.plot(x, y, color="red")
-        lines.append((x, y))
-
     approx_area = 0.0
     dx = (b - a) / n if n > 0 else 0
 
-    for line_a, line_b in zip(lines, lines[1:]):
-        x1 = line_a[0][0]
-        y1_top = line_a[1][1]
+    for i in range(n):
+        x_i = calc_x[i]
+        y_i = calc_y[i]
+        x_iplus1 = calc_x[i+1]
+        y_iplus1 = calc_y[i+1]
 
-        x2 = line_b[0][0]
-        y2_top = line_b[1][1]
+        plot.plot([x_i, x_i], [0, y_i], color="red")
+        plot.plot([x_iplus1, x_iplus1], [0, y_iplus1], color="red")
 
-        y_level = __builtins__.min(y1_top, y2_top)
+        plot.plot([x_i, x_iplus1], [y_i, y_iplus1], color="red")
 
-        plot.plot([x1, x2], [y_level, y_level], color="red")
-
-        approx_area += dx * (y1_top + y2_top) / 2
+        approx_area += (y_i + y_iplus1) * dx / 2
 
     canvas.draw()
 
@@ -56,8 +43,8 @@ def on_btn_generate_clicked():
 
     text_out.config(state="normal")
     text_out.delete("1.0", t.END)
-    text_out.insert(t.END, f"Approximate Area: {approx_area:.2f}\n")
-    text_out.insert(t.END, f"True Area: {true_area:.2f}\n")
+    text_out.insert(t.END, f"Trapezoidal Rule: {approx_area:.2f}\n")
+    text_out.insert(t.END, f"Integral Rule: {true_area:.2f}\n")
     text_out.insert(t.END, f"Difference: {difference:.2f}\n")
     text_out.config(state="disabled")
 
